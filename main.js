@@ -1,11 +1,23 @@
 // HOTELS data natively populated securely during loading sequence via API
 window.HOTELS = [];
 
+// Hotel slug to image mapping
+const HOTEL_IMAGES = {
+  'capital': 'images/hero.jpg',
+  'lilongwe': 'images/images (6).jpeg',
+  'nkopola': 'images/images (2).jpeg',
+  'livingstonia': 'images/livingstonia.jpg',
+  'mzuzu': 'images/images (7).jpeg',
+  'soche': 'images/sunbird-mount-soche.jpg',
+  'kuchawe': 'images/images (5).jpeg',
+  'ryalls': 'images/images (4).jpeg',
+  'makokola': 'images/livingstonia-7.jpg'
+};
+
 // Render hotel card directly adapting backend schema aliases 
 function renderHotelCard(h) {
-  // Mapping API database keys directly explicitly avoiding null breaking
   const ident = h.slug || h.id;
-  const imageDisplay = h.image || 'images/hero.jpg'; 
+  const imageDisplay = HOTEL_IMAGES[h.slug] || h.image || 'images/hero.jpg'; 
 
   return `
     <div class="hotel-card fade-in" data-category="${h.category}" data-city="${h.city}">
@@ -13,7 +25,7 @@ function renderHotelCard(h) {
       <div class="hotel-body">
         <h3>${h.name}</h3>
         <div class="hotel-location">📍 ${h.city}</div>
-        <p class="hotel-desc">${h.short_description || h.desc}</p>
+        <p class="hotel-desc">${h.short_description || h.desc || ''}</p>
         <div class="stars">★★★★★</div>
         <a href="hotel-template.html?hotel=${ident}" class="btn btn-outline-primary">View Hotel</a>
       </div>
@@ -26,6 +38,7 @@ function renderHotels(containerId, hotels = window.HOTELS) {
   const c = document.getElementById(containerId);
   if (!c) return;
   c.innerHTML = hotels.map(renderHotelCard).join('');
+  initFadeIn();
 }
 
 // Populate hotel dropdowns intelligently mapping available ID
@@ -200,12 +213,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     initLiveChat();
     initHeroSlider();
 
-    // Check memory immediately explicitly bypassing spinner entirely definitively cleanly organically smoothly natively smoothly
+    // Load cached hotel data if available
     const cachedData = sessionStorage.getItem('sunbird_hotels_data');
     if (cachedData) {
         try {
-            window.HOTELS = JSON.parse(cachedData);
-        } catch(e) {}
+            const parsed = JSON.parse(cachedData);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+                window.HOTELS = parsed;
+            } else {
+                // Stale/empty cache — clear it so we fetch fresh
+                sessionStorage.removeItem('sunbird_hotels_data');
+            }
+        } catch(e) {
+            sessionStorage.removeItem('sunbird_hotels_data');
+        }
     }
 
     let spinner = null;
