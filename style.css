@@ -1097,7 +1097,18 @@ footer {
   .logo-img { max-height: 55px; } /* Scale down logo on mobile */
   .footer-col .logo-img { max-height: 80px; }
   
-  .filter-btn { padding: 8px 14px; font-size: 0.85rem; }
+  /* Mobile Swipeable Filter Bar */
+  .filter-bar {
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding: 0 24px 10px;
+    margin: 0 -24px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .filter-bar::-webkit-scrollbar { display: none; }
+  .filter-btn { padding: 8px 16px; font-size: 0.85rem; flex-shrink: 0; }
   .filter-sticky-container { top: 75px; padding: 10px 0; } /* Matches smaller nav height */
   .chat-widget { bottom: 20px; right: 20px; }
   .chat-window { right: -10px; width: 300px; }
