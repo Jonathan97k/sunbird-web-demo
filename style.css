@@ -421,6 +421,7 @@ footer {
 .page-hero::before {
   content: ''; position: absolute; inset: 0;
   background: radial-gradient(circle at 80% 20%, rgba(201,168,76,0.25), transparent 55%);
+  pointer-events: none;
 }
 .page-hero h1 { color: #fff; font-size: clamp(2rem, 4vw, 3.5rem); margin-bottom: 12px; position: relative; }
 .page-hero p { opacity: 0.9; font-size: 1.1rem; position: relative; }
