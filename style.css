@@ -1094,8 +1094,36 @@ footer {
   .page-hero { padding: 60px 0 40px; }
   .section-title { font-size: 1.8rem; }
   .logo-main { font-size: 1.4rem; }
-  .logo-img { max-height: 55px; } /* Scale down logo on mobile */
-  .footer-col .logo-img { max-height: 80px; }
+  
+  /* Hide image logo, show text logo on mobile */
+  .navbar .logo-img { display: none; }
+  .logo-text { display: block !important; }
+  .footer-col .logo-img { max-height: 80px; display: block; }
+  .footer-col .logo-text { display: none !important; }
+  
+  /* Compact mobile nav */
+  .nav-container { padding: 12px 16px; }
+  
+  /* Mobile menu styling */
+  .nav-menu {
+    padding: 16px 20px;
+    gap: 0;
+    border-top: 2px solid var(--gold);
+  }
+  .nav-menu li {
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-menu li:last-child { border-bottom: none; }
+  .nav-menu a {
+    display: block;
+    padding: 14px 0;
+    font-size: 1rem;
+  }
+  .nav-menu .btn {
+    text-align: center;
+    margin-top: 8px;
+    border-radius: 8px;
+  }
   
   /* Mobile Swipeable Filter Bar */
   .filter-bar {
@@ -1109,7 +1137,7 @@ footer {
   }
   .filter-bar::-webkit-scrollbar { display: none; }
   .filter-btn { padding: 8px 16px; font-size: 0.85rem; flex-shrink: 0; }
-  .filter-sticky-container { top: 105px; padding: 10px 0; } /* Matches smaller nav height */
+  .filter-sticky-container { top: 52px; padding: 10px 0; }
   .chat-widget { bottom: 20px; right: 20px; }
   .chat-window { right: -10px; width: 300px; }
 }
@@ -1119,6 +1147,15 @@ footer {
   max-height: 91px;
   width: auto;
   display: block;
+}
+.logo-text {
+  display: none; /* Hidden on desktop, shown on mobile */
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--primary);
+  letter-spacing: 3px;
+  text-transform: uppercase;
 }
 .footer-col .logo-img {
   max-height: 114px;
