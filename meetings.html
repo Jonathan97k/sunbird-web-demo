@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meetings &amp; Events — Sunbird Tourism PLC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="logo">
+      <img src="images/Logo.jpg" alt="Sunbird Hotels & Resorts" class="logo-img">
+    </a>
+    <ul class="nav-menu">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="hotels.html">Our Hotels</a></li>
+      <li><a href="meetings.html" class="active">Meetings &amp; Events</a></li>
+      <li><a href="offers.html">Special Offers</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="book.html" class="btn btn-primary">Book Now</a></li>
+    </ul>
+    <button class="hamburger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<section class="page-hero" style="background: linear-gradient(135deg, rgba(139,0,0,0.85) 0%, rgba(61,0,0,0.8) 100%), url('images/Caucus.jpg') center/cover no-repeat;">
+  <div class="container">
+    <h1>Meetings &amp; Events</h1>
+    <p>Malawi's most prestigious venues for business and celebration</p>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <p style="text-align:center; max-width: 800px; margin: 0 auto 60px; font-size: 1.1rem; color: var(--gray);" class="fade-in">
+      Sunbird Tourism PLC offers Malawi's most prestigious event spaces, from intimate boardrooms to grand ballrooms capable of hosting 500+ delegates. Every event is supported by our dedicated coordinators, seamless catering, and signature Sunbird hospitality.
+    </p>
+
+    <h2 class="section-title fade-in">Our Venues</h2>
+    <div class="gold-divider"></div>
+
+    <div class="venue-cards">
+      <div class="venue-card fade-in">
+        <div class="venue-img" style="background: url('images/sunbird-mount-soche.jpg') center/cover no-repeat;"></div>
+        <div class="venue-body">
+          <h3>The Grand Ballroom</h3>
+          <div class="cap">CAPACITY: 500</div>
+          <div class="prop">Sunbird Mount Soche, Blantyre</div>
+        </div>
+      </div>
+      <div class="venue-card fade-in">
+        <div class="venue-img" style="background: url('images/Caucus.jpg') center/cover no-repeat;"></div>
+        <div class="venue-body">
+          <h3>The Boardroom Suite</h3>
+          <div class="cap">CAPACITY: 20</div>
+          <div class="prop">Available at multiple properties</div>
+        </div>
+      </div>
+      <div class="venue-card fade-in">
+        <div class="venue-img" style="background: url('images/img-20210923-wa01837279225462797015705.jpg') center/cover no-repeat;"></div>
+        <div class="venue-body">
+          <h3>The Conference Centre</h3>
+          <div class="cap">CAPACITY: 200</div>
+          <div class="prop">Sunbird Capital Hotel, Lilongwe</div>
+        </div>
+      </div>
+      <div class="venue-card fade-in">
+        <div class="venue-img" style="background: url('images/2.jpg') center/cover no-repeat;"></div>
+        <div class="venue-body">
+          <h3>Garden &amp; Outdoor Venues</h3>
+          <div class="cap">CAPACITY: 300+</div>
+          <div class="prop">Lakeside properties</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="features-list fade-in">
+      <h3>Every event includes</h3>
+      <div class="gold-divider" style="margin-left:0;"></div>
+      <ul>
+        <li>State-of-the-art AV equipment</li>
+        <li>High-speed conference WiFi</li>
+        <li>Professional catering and bar service</li>
+        <li>Dedicated events coordinator</li>
+        <li>Accommodation packages for delegates</li>
+        <li>Airport transfers available</li>
+      </ul>
+    </div>
+
+    <h2 class="section-title fade-in">Enquire Now</h2>
+    <div class="gold-divider"></div>
+
+    <form class="fade-in" style="max-width: 720px; margin: 0 auto; background: #fff; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.06);"
+      onsubmit="fakeSubmit(event, 'Thank you for your enquiry. Our events team will contact you within 24 hours.')">
+      <div class="form-group">
+        <label>Event Type</label>
+        <select required>
+          <option value="">Select event type...</option>
+          <option>Conference</option>
+          <option>Wedding</option>
+          <option>Corporate Dinner</option>
+          <option>Workshop</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Preferred Property</label>
+        <select data-hotel-dropdown required></select>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+        <div class="form-group">
+          <label>Date of Event</label>
+          <input type="date" required>
+        </div>
+        <div class="form-group">
+          <label>Number of Delegates</label>
+          <input type="number" min="1" required placeholder="e.g. 50">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" required>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+        <div class="form-group"><label>Email</label><input type="email" required></div>
+        <div class="form-group"><label>Phone</label><input type="tel" required value="+265 "></div>
+      </div>
+      <div class="form-group">
+        <label>Special Requirements</label>
+        <textarea rows="4" placeholder="Dietary needs, AV setup, accommodation requirements..."></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%;">Send Enquiry</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="logo" style="margin-bottom: 20px;">
+          <img src="images/Logo.jpg" alt="Sunbird Hotels & Resorts" class="logo-img">
+        </div>
+        <p>Malawi's premier hospitality group.</p>
+        <div class="socials"><a href="#">f</a><a href="#">𝕏</a><a href="#">◉</a></div>
+      </div>
+      <div class="footer-col">
+        <h4>Our Hotels</h4>
+        <ul>
+          <li><a href="hotel-template.html?hotel=capital">Sunbird Capital</a></li>
+          <li><a href="hotel-template.html?hotel=lilongwe">Sunbird Lilongwe</a></li>
+          <li><a href="hotel-template.html?hotel=nkopola">Sunbird Nkopola Lodge</a></li>
+          <li><a href="hotel-template.html?hotel=livingstonia">Sunbird Livingstonia Beach</a></li>
+          <li><a href="hotel-template.html?hotel=mzuzu">Sunbird Mzuzu</a></li>
+          <li><a href="hotel-template.html?hotel=soche">Sunbird Mount Soche</a></li>
+          <li><a href="hotel-template.html?hotel=kuchawe">Sunbird Ku Chawe</a></li>
+          <li><a href="hotel-template.html?hotel=ryalls">Sunbird Ryalls</a></li>
+          <li><a href="hotel-template.html?hotel=makokola">Sunbird Club Makokola</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="hotels.html">Our Hotels</a></li>
+          <li><a href="meetings.html">Meetings &amp; Events</a></li>
+          <li><a href="offers.html">Special Offers</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <p>📞 0111 773 388</p>
+        <p>✉ centralres@sunbirdmalawi.com</p>
+        <p>📍 28 Glyn Jones Road, Blantyre</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Sunbird Tourism PLC. All rights reserved. | Website by <a href="#" class="velox">Velox Technologies</a></p>
+    </div>
+  </div>
+</footer>
+
+<button class="back-to-top">↑</button>
+<script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book Your Stay — Sunbird Tourism PLC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="logo">
+      <img src="images/Logo.jpg" alt="Sunbird Hotels & Resorts" class="logo-img">
+    </a>
+    <ul class="nav-menu">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="hotels.html">Our Hotels</a></li>
+      <li><a href="meetings.html">Meetings &amp; Events</a></li>
+      <li><a href="offers.html">Special Offers</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="book.html" class="btn btn-primary active">Book Now</a></li>
+    </ul>
+    <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<section class="page-hero" style="min-height: 400px; background: linear-gradient(135deg, rgba(139,0,0,0.85) 0%, rgba(61,0,0,0.8) 100%), url('images/room-1.jpg') center/cover no-repeat;">
+  <div class="container">
+    <h1>Book Your Stay</h1>
+    <p>Find the perfect room at any of our nine iconic properties across Malawi.</p>
+  </div>
+</section>
+
+<div class="container sticky-search-container" style="top: 100px; margin-bottom: 80px;">
+  <form class="search-bar" onsubmit="handleSearch(event)">
+    <div class="search-field">
+      <label>Destination</label>
+      <select data-hotel-dropdown required></select>
+    </div>
+    <div class="search-field">
+      <label>Check-in</label>
+      <input type="date" required>
+    </div>
+    <div class="search-field">
+      <label>Check-out</label>
+      <input type="date" required>
+    </div>
+    <div class="search-field">
+      <label>Guests</label>
+      <input type="number" min="1" value="1" placeholder="Number of guests" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+  </form>
+</div>
+
+<section style="padding-top: 0;">
+  <div class="container">
+    <div style="text-align: center; max-width: 600px; margin: 0 auto;">
+      <h2 style="font-size: 2rem; margin-bottom: 20px;">Need Assistance?</h2>
+      <p style="color: var(--gray); margin-bottom: 30px;">Our dedicated central reservations team is ready to help you plan your perfect getaway or business trip. Contact us directly for group bookings or special requests.</p>
+      <div style="display: flex; gap: 20px; justify-content: center;">
+        <a href="tel:0111773388" class="btn btn-outline-primary">📞 Call Reservations</a>
+        <a href="mailto:centralres@sunbirdmalawi.com" class="btn btn-outline-primary">✉ Email Us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="logo" style="margin-bottom: 20px;">
+          <img src="images/Logo.jpg" alt="Sunbird Hotels & Resorts" class="logo-img">
+        </div>
+        <p>Malawi's premier hospitality group.</p>
+        <div class="socials"><a href="#">f</a><a href="#">𝕏</a><a href="#">◉</a></div>
+      </div>
+      <div class="footer-col">
+        <h4>Our Hotels</h4>
+        <ul>
+          <li><a href="hotel-template.html?hotel=capital">Sunbird Capital</a></li>
+          <li><a href="hotel-template.html?hotel=lilongwe">Sunbird Lilongwe</a></li>
+          <li><a href="hotel-template.html?hotel=nkopola">Sunbird Nkopola Lodge</a></li>
+          <li><a href="hotel-template.html?hotel=livingstonia">Sunbird Livingstonia Beach</a></li>
+          <li><a href="hotel-template.html?hotel=mzuzu">Sunbird Mzuzu</a></li>
+          <li><a href="hotel-template.html?hotel=soche">Sunbird Mount Soche</a></li>
+          <li><a href="hotel-template.html?hotel=kuchawe">Sunbird Ku Chawe</a></li>
+          <li><a href="hotel-template.html?hotel=ryalls">Sunbird Ryalls</a></li>
+          <li><a href="hotel-template.html?hotel=makokola">Sunbird Club Makokola</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="hotels.html">Our Hotels</a></li>
+          <li><a href="meetings.html">Meetings &amp; Events</a></li>
+          <li><a href="offers.html">Special Offers</a></li>
+          <li><a href="book.html">Book Now</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <p>📞 0111 773 388</p>
+        <p>✉ centralres@sunbirdmalawi.com</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Sunbird Tourism PLC. All rights reserved. | Website by Velox Technologies</p>
+    </div>
+  </div>
+</footer>
+
+<script src="main.js"></script>
+</body>
+</html>

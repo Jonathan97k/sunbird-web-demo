@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hotel Details — Sunbird Tourism PLC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body id="hotel-template-page">
+
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="logo">
+      <img src="images/Logo.jpg" alt="Sunbird Hotels & Resorts" class="logo-img">
+    </a>
+    <ul class="nav-menu">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="hotels.html" class="active">Our Hotels</a></li>
+      <li><a href="meetings.html">Meetings &amp; Events</a></li>
+      <li><a href="offers.html">Special Offers</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="#" class="btn btn-primary" onclick="openModal('bookingModal'); return false;">Book Now</a></li>
+    </ul>
+    <button class="hamburger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<section class="page-hero" style="background: linear-gradient(135deg, #8B0000 0%, #3D0000 50%, #1A0000 100%); padding: 120px 0;">
+  <div class="container">
+    <h1 data-hotel-name>Sunbird Capital Hotel</h1>
+    <p style="margin-bottom: 14px;">📍 <span data-hotel-city>Lilongwe</span>, Malawi</p>
+    <div class="stars" style="font-size: 1.2rem; margin-bottom: 24px;">★★★★★</div>
+    <a href="#" class="btn btn-gold" onclick="openModal('bookingModal'); return false;">Book This Hotel</a>
+  </div>
+</section>
+
+<div class="breadcrumb">
+  <div class="container">
+    <a href="index.html">Home</a> &raquo; <a href="hotels.html">Hotels</a> &raquo; <span data-hotel-name>Sunbird Capital Hotel</span>
+  </div>
+</div>
+
+<section>
+  <div class="container">
+    <div class="hotel-detail-grid">
+      <div class="hotel-detail-left fade-in">
+        <h2>About <span data-hotel-name>Sunbird Capital Hotel</span></h2>
+        <div class="gold-divider" style="margin-left:0;"></div>
+        <p>Nestled in the heart of <span data-hotel-city>Lilongwe</span>, our property represents the pinnacle of Malawian hospitality. Elegantly appointed rooms, world-class dining, and a dedicated staff come together to create an unforgettable stay for both business and leisure travellers.</p>
+        <p>Every detail has been thoughtfully curated — from the locally-inspired interiors to the Olympic-sized swimming pool and verdant tropical gardens. Whether you're here for a day, a week, or longer, our promise remains the same: exceptional service with warmth only Malawi can offer.</p>
+        <p>Enjoy fine dining at our signature restaurant, unwind at the spa, or conduct business in our state-of-the-art conference facilities. At Sunbird, every moment is an opportunity to experience something extraordinary.</p>
+
+        <h3 style="margin-top: 40px;">Amenities</h3>
+        <div class="gold-divider" style="margin-left:0;"></div>
+        <div class="amenities-grid">
+          <div class="amenity-item"><span class="icon">📶</span>Free WiFi</div>
+          <div class="amenity-item"><span class="icon">🏊</span>Pool</div>
+          <div class="amenity-item"><span class="icon">🍽️</span>Restaurant</div>
+          <div class="amenity-item"><span class="icon">🍸</span>Bar</div>
+          <div class="amenity-item"><span class="icon">💪</span>Gym</div>
+          <div class="amenity-item"><span class="icon">📊</span>Conference</div>
+          <div class="amenity-item"><span class="icon">🅿️</span>Parking</div>
+          <div class="amenity-item"><span class="icon">💆</span>Spa</div>
+          <div class="amenity-item"><span class="icon">✈️</span>Airport Shuttle</div>
+          <div class="amenity-item"><span class="icon">🛎️</span>Room Service</div>
+        </div>
+
+        <h3 style="margin-top: 40px;">Gallery</h3>
+        <div class="gold-divider" style="margin-left:0;"></div>
+        <div class="gallery-grid">
+          <div style="background: url('images/img-20210923-wa01837279225462797015705.jpg') center/cover;"></div>
+          <div style="background: url('images/images (4).jpeg') center/cover;"></div>
+          <div style="background: url('images/livingstonia-7.jpg') center/cover;"></div>
+          <div style="background: url('images/images (5).jpeg') center/cover;"></div>
+          <div style="background: url('images/images (2).jpeg') center/cover;"></div>
+          <div style="background: url('images/Caucus.jpg') center/cover;"></div>
+        </div>
+      </div>
+
+      <aside class="booking-card fade-in">
+        <h3>Book Your Stay</h3>
+        <div class="search-field"><label>Check-in</label><input type="date"></div>
+        <div class="search-field"><label>Check-out</label><input type="date"></div>
+        <div class="search-field"><label>Guests</label>
+          <input type="number" min="1" value="1" placeholder="Number of guests" required>
+        </div>
+        <div class="search-field"><label>Room Type</label>
+          <select>
+            <option>Standard Room</option>
+            <option>Deluxe Room</option>
+            <option>Suite</option>
+            <option>Presidential Suite</option>
+          </select>
+        </div>
+        <div class="price-display">
+          <div class="price">From MWK 85,000</div>
+          <span>per night</span>
+        </div>
+        <button class="btn btn-primary" style="width:100%;" onclick="openModal('bookingModal')">Check Availability</button>
+        <a href="#" class="whatsapp-link">💬 Or enquire via WhatsApp</a>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section style="background: var(--light);">
+  <div class="container">
+    <h2 class="section-title fade-in">Our Rooms</h2>
+    <div class="gold-divider"></div>
+    <p class="section-sub fade-in">Choose your perfect retreat</p>
+
+    <div class="rooms-grid">
+      <div class="room-card fade-in">
+        <div class="room-image" style="background: url('images/images (1).jpeg') center/cover;"></div>
+        <div class="room-body">
+          <h4>Standard Room</h4>
+          <div class="room-price">MWK 85,000 / night</div>
+          <div class="room-amenities">📶 🛏️ ☕ 📺</div>
+          <button class="btn btn-outline-primary" onclick="openModal('bookingModal')">Book Now</button>
+        </div>
+      </div>
+      <div class="room-card fade-in">
+        <div class="room-image" style="background: url('images/room-1.jpg') center/cover;"></div>
+        <div class="room-body">
+          <h4>Deluxe Room</h4>
+          <div class="room-price">MWK 130,000 / night</div>
+          <div class="room-amenities">📶 🛏️ ☕ 🛁</div>
+          <button class="btn btn-outline-primary" onclick="openModal('bookingModal')">Book Now</button>
+        </div>
+      </div>
+      <div class="room-card fade-in">
+        <div class="room-image" style="background: url('images/images (3).jpeg') center/cover;"></div>
+        <div class="room-body">
+          <h4>Suite</h4>
+          <div class="room-price">MWK 220,000 / night</div>
+          <div class="room-amenities">📶 🛋️ 🥂 🛁</div>
+          <button class="btn btn-outline-primary" onclick="openModal('bookingModal')">Book Now</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="map-section">
+  <div class="container">
+    <h2 class="section-title fade-in">Location</h2>
+    <div class="gold-divider"></div>
+    <div class="map-embed fade-in" id="hotel-map-container" style="display:flex; flex-direction:column;">
+      <div style="flex-grow: 1; width: 100%; position: relative;">
+        <iframe id="hotel-gmap" src="" width="100%" height="100%" style="border:0; position:absolute; top:0; left:0;" allowfullscreen="" loading="lazy"></iframe>
+      </div>
+      <div style="background:#fff; padding: 16px; text-align:center; border-top: 1px solid #eaeaea;">
+        <a id="hotel-directions-btn" href="#" target="_blank" class="btn btn-outline-primary" style="font-weight: 600;">
+          📍 Get Full Directions on Google Maps
+        </a>
+      </div>
+    </div>
+    <p style="text-align: center; margin-top: 20px; color: var(--gray);">
+      Capital Hill, City Centre, <span data-hotel-city>Lilongwe</span>, Malawi
+    </p>
+  </div>
+</section>
+
+<!-- BOOKING MODAL -->
+<div class="modal-overlay" id="bookingModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('bookingModal')">×</button>
+    <h2>Complete Your Booking</h2>
+    <p class="modal-sub"><span data-hotel-name>Sunbird Capital Hotel</span> — Deluxe Room</p>
+
+    <form onsubmit="fakeSubmit(event, 'Booking confirmed! Your reservation reference will be emailed shortly.'); closeModal('bookingModal'); return false;">
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" required placeholder="John Banda">
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" required placeholder="you@example.com">
+      </div>
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input type="tel" required placeholder="+265 888 123 456" value="+265 ">
+      </div>
+
+      <div class="form-group">
+        <label>Payment Method</label>
+        <div class="payment-methods">
+          <button type="button" class="pay-btn active" data-pay="card">💳 Card</button>
+          <button type="button" class="pay-btn" data-pay="airtel">📱 Airtel Money</button>
+          <button type="button" class="pay-btn" data-pay="tnm">📱 TNM Mpamba</button>
+        </div>
+
+        <div class="payment-detail" id="pay-card">
+          <div class="form-group"><label>Card Number</label><input type="text" placeholder="1234 5678 9012 3456"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div class="form-group"><label>Expiry</label><input type="text" placeholder="MM/YY"></div>
+            <div class="form-group"><label>CVV</label><input type="text" placeholder="123"></div>
+          </div>
+        </div>
+
+        <div class="payment-detail hidden" id="pay-airtel">
+          <div class="form-group"><label>Enter your Airtel Money number</label><input type="tel" placeholder="+265 999 123 456"></div>
+          <p>📲 You will receive a payment prompt on your phone to confirm.</p>
+        </div>
+
+        <div class="payment-detail hidden" id="pay-tnm">
+          <div class="form-group"><label>Enter your TNM Mpamba number</label><input type="tel" placeholder="+265 888 123 456"></div>
+          <p>📲 You will receive a payment prompt on your phone to confirm.</p>
+        </div>
+      </div>
+
+      <div class="modal-total">
+        <span>Total (2 nights)</span>
+        <span style="color: var(--primary);">MWK 260,000</span>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width:100%;">Confirm Booking</button>
+      <p class="paychangu-note">🔒 Powered by <strong>Paychangu</strong> — Secure Payment Gateway</p>
+    </form>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="logo" style="margin-bottom: 20px;">
+          <img src="images/Logo.jpg" alt="Sunbird Hotels & Resorts" class="logo-img">
+        </div>
+        <p>Malawi's premier hospitality group.</p>
+        <div class="socials"><a href="#">f</a><a href="#">𝕏</a><a href="#">◉</a></div>
+      </div>
+      <div class="footer-col">
+        <h4>Our Hotels</h4>
+        <ul>
+          <li><a href="hotel-template.html?hotel=capital">Sunbird Capital</a></li>
+          <li><a href="hotel-template.html?hotel=lilongwe">Sunbird Lilongwe</a></li>
+          <li><a href="hotel-template.html?hotel=nkopola">Sunbird Nkopola Lodge</a></li>
+          <li><a href="hotel-template.html?hotel=livingstonia">Sunbird Livingstonia Beach</a></li>
+          <li><a href="hotel-template.html?hotel=mzuzu">Sunbird Mzuzu</a></li>
+          <li><a href="hotel-template.html?hotel=soche">Sunbird Mount Soche</a></li>
+          <li><a href="hotel-template.html?hotel=kuchawe">Sunbird Ku Chawe</a></li>
+          <li><a href="hotel-template.html?hotel=ryalls">Sunbird Ryalls</a></li>
+          <li><a href="hotel-template.html?hotel=makokola">Sunbird Club Makokola</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="hotels.html">Our Hotels</a></li>
+          <li><a href="meetings.html">Meetings &amp; Events</a></li>
+          <li><a href="offers.html">Special Offers</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <p>📞 0111 773 388</p>
+        <p>✉ centralres@sunbirdmalawi.com</p>
+        <p>📍 28 Glyn Jones Road, Blantyre</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Sunbird Tourism PLC. All rights reserved. | Website by <a href="#" class="velox">Velox Technologies</a></p>
+    </div>
+  </div>
+</footer>
+
+<button class="back-to-top">↑</button>
+<script src="main.js"></script>
+</body>
+</html>

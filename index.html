@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sunbird Tourism PLC — Malawi's Premier Hotels & Resorts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="logo">
+      <img src="images/Logo.jpg" alt="Sunbird Hotels & Resorts" class="logo-img">
+    </a>
+    <ul class="nav-menu">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="hotels.html">Our Hotels</a></li>
+      <li><a href="meetings.html">Meetings &amp; Events</a></li>
+      <li><a href="offers.html">Special Offers</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="book.html" class="btn btn-primary">Book Now</a></li>
+    </ul>
+    <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-content">
+    <h1>Experience Malawi's Finest Hospitality</h1>
+    <p class="hero-sub">Nine exceptional properties. One unforgettable standard.</p>
+    <div class="hero-buttons">
+      <a href="hotels.html" class="btn btn-gold">Explore Our Hotels</a>
+      <a href="book.html" class="btn btn-outline-white">Book Now</a>
+    </div>
+  </div>
+</section>
+
+
+
+<section>
+  <div class="container">
+    <h2 class="section-title fade-in">Why Choose Sunbird</h2>
+    <div class="gold-divider"></div>
+    <p class="section-sub fade-in">The hallmark of Malawian hospitality since 1966</p>
+    <div class="features-grid">
+      <div class="feature-card fade-in">
+        <div class="feature-icon">🏨</div>
+        <h3>9 Iconic Properties</h3>
+        <p>From city centres to lakeside shores</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon">🏞️</div>
+        <h3>Lake &amp; Mountain Views</h3>
+        <p>Unforgettable scenery at every stay</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon">🍴</div>
+        <h3>World-Class Dining</h3>
+        <p>Exceptional cuisine and fine wines</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon">📊</div>
+        <h3>Conference Facilities</h3>
+        <p>Venues for every business need</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="background: var(--light);">
+  <div class="container">
+    <h2 class="section-title fade-in">Our Properties</h2>
+    <div class="gold-divider"></div>
+    <p class="section-sub fade-in">Discover nine distinct experiences across Malawi</p>
+    
+    <div class="filter-sticky-container" style="margin-top: 0;">
+
+      <div class="filter-bar fade-in">
+        <button class="filter-btn active" data-filter="city" data-value="all">All Properties</button>
+        <button class="filter-btn" data-filter="city" data-value="Lilongwe">Lilongwe</button>
+        <button class="filter-btn" data-filter="city" data-value="Blantyre">Blantyre</button>
+        <button class="filter-btn" data-filter="city" data-value="Mangochi">Mangochi</button>
+        <button class="filter-btn" data-filter="city" data-value="Salima">Salima</button>
+        <button class="filter-btn" data-filter="city" data-value="Mzuzu">Mzuzu</button>
+        <button class="filter-btn" data-filter="city" data-value="Zomba">Zomba</button>
+      </div>
+    </div>
+    <div id="no-results-msg" style="display:none; text-align:center; padding: 40px; color: var(--gray); font-size: 1.2rem;">No properties found for the selected combination. Please adjust your filters.</div>
+
+    <div class="hotels-grid" id="hotels-grid-home"></div>
+  </div>
+</section>
+
+<section class="offers-banner fade-in">
+  <div class="container">
+    <h2>Exclusive Member Rates</h2>
+    <p>Save up to 30% on your next stay</p>
+    <a href="offers.html" class="btn btn-gold">View All Offers</a>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="meetings-split">
+      <div class="meetings-text fade-in">
+        <h2>World-Class Conference Facilities</h2>
+        <div class="gold-divider" style="margin-left: 0;"></div>
+        <p>From intimate boardrooms to grand ballrooms — Sunbird hosts Malawi's most important events with state-of-the-art facilities and seamless service.</p>
+        <a href="meetings.html" class="btn btn-primary">Plan Your Event</a>
+      </div>
+      <div class="meetings-boxes fade-in">
+        <div class="meeting-box">Grand Ballrooms</div>
+        <div class="meeting-box">Boardrooms</div>
+        <div class="meeting-box">Outdoor Venues</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="logo" style="margin-bottom: 20px;">
+          <img src="images/Logo.jpg" alt="Sunbird Hotels & Resorts" class="logo-img">
+        </div>
+        <p>Malawi's premier hospitality group. Nine iconic properties offering world-class comfort and uniquely Malawian warmth.</p>
+        <div class="socials">
+          <a href="#" aria-label="Facebook">f</a>
+          <a href="#" aria-label="X">𝕏</a>
+          <a href="#" aria-label="Instagram">◉</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Our Hotels</h4>
+        <ul>
+          <li><a href="hotel-template.html?hotel=capital">Sunbird Capital</a></li>
+          <li><a href="hotel-template.html?hotel=lilongwe">Sunbird Lilongwe</a></li>
+          <li><a href="hotel-template.html?hotel=nkopola">Sunbird Nkopola Lodge</a></li>
+          <li><a href="hotel-template.html?hotel=livingstonia">Sunbird Livingstonia Beach</a></li>
+          <li><a href="hotel-template.html?hotel=mzuzu">Sunbird Mzuzu</a></li>
+          <li><a href="hotel-template.html?hotel=soche">Sunbird Mount Soche</a></li>
+          <li><a href="hotel-template.html?hotel=kuchawe">Sunbird Ku Chawe</a></li>
+          <li><a href="hotel-template.html?hotel=ryalls">Sunbird Ryalls</a></li>
+          <li><a href="hotel-template.html?hotel=makokola">Sunbird Club Makokola</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="hotels.html">Our Hotels</a></li>
+          <li><a href="meetings.html">Meetings &amp; Events</a></li>
+          <li><a href="offers.html">Special Offers</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="admin.html">Staff Portal</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <p><strong style="color:#fff;">Reservations</strong></p>
+        <p>📞 0111 773 388</p>
+        <p>📞 0885 996 521</p>
+        <p>✉ centralres@sunbirdmalawi.com</p>
+        <p>📍 28 Glyn Jones Road, Blantyre, Malawi</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Sunbird Tourism PLC. All rights reserved. | Website by <a href="#" class="velox">Velox Technologies</a></p>
+      <p style="margin-top:8px; font-size: 0.8rem;">Designed and developed by <a href="mailto:veloxtech.mw@gmail.com" class="velox">Velox Technologies</a> — veloxtech.mw@gmail.com</p>
+    </div>
+  </div>
+</footer>
+
+<button class="back-to-top" aria-label="Back to top">↑</button>
+<script src="main.js"></script>
+</body>
+</html>

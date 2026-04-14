@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Staff Portal — Sunbird Tourism PLC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="admin-body">
+
+<div class="admin-card" id="login-card">
+  <div class="logo" style="text-align:center; align-items:center;">
+    <img src="images/Logo.jpg" alt="Sunbird CMS" class="logo-img" style="max-height: 80px; margin: 0 auto; display:block;">
+  </div>
+  <h2>Staff Portal</h2>
+  <form onsubmit="return adminLogin(event)">
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" required placeholder="you@sunbirdmalawi.com">
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" required placeholder="••••••••">
+    </div>
+    <button type="submit" class="btn btn-primary">Login to CMS</button>
+  </form>
+  <div class="admin-footer-note">
+    CMS powered by <strong>Velox Technologies</strong>
+  </div>
+</div>
+
+<div class="dashboard" id="dashboard">
+  <aside class="dash-sidebar">
+    <div class="logo">
+      <img src="images/Logo.jpg" alt="Sunbird CMS" class="logo-img" style="max-height: 48px;">
+    </div>
+    <ul class="dash-nav">
+      <li class="active">📊 Dashboard</li>
+      <li>🏨 Hotels</li>
+      <li>🛏️ Rooms</li>
+      <li>📅 Bookings</li>
+      <li>🎁 Promotions</li>
+      <li>🖼️ Gallery</li>
+      <li>⚙️ Settings</li>
+      <li style="margin-top:40px;"><a href="index.html" style="color: inherit;">↩ Back to Site</a></li>
+    </ul>
+  </aside>
+
+  <main class="dash-main">
+    <h2>Dashboard Overview</h2>
+    <p style="color: var(--gray); margin-bottom: 30px;">Welcome back, Administrator. Here's what's happening today.</p>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="num">247</div>
+        <div class="label">Total Bookings</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">38</div>
+        <div class="label">This Month</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">9</div>
+        <div class="label">Properties</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">12</div>
+        <div class="label">Pending Enquiries</div>
+      </div>
+    </div>
+
+    <div class="dash-table-wrap">
+      <h3 style="margin-bottom: 20px;">Recent Bookings</h3>
+      <table class="dash-table">
+        <thead>
+          <tr>
+            <th>Guest</th>
+            <th>Hotel</th>
+            <th>Check-in</th>
+            <th>Check-out</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Chimwemwe Banda</td>
+            <td>Sunbird Capital Hotel</td>
+            <td>15 Mar 2026</td>
+            <td>18 Mar 2026</td>
+            <td><span class="status status-confirmed">Confirmed</span></td>
+          </tr>
+          <tr>
+            <td>Tadala Phiri</td>
+            <td>Sunbird Club Makokola</td>
+            <td>22 Mar 2026</td>
+            <td>26 Mar 2026</td>
+            <td><span class="status status-confirmed">Confirmed</span></td>
+          </tr>
+          <tr>
+            <td>James Mwale</td>
+            <td>Sunbird Mount Soche</td>
+            <td>01 Apr 2026</td>
+            <td>03 Apr 2026</td>
+            <td><span class="status status-pending">Pending</span></td>
+          </tr>
+          <tr>
+            <td>Grace Kumwenda</td>
+            <td>Sunbird Livingstonia Beach</td>
+            <td>10 Apr 2026</td>
+            <td>14 Apr 2026</td>
+            <td><span class="status status-confirmed">Confirmed</span></td>
+          </tr>
+          <tr>
+            <td>Samuel Chirwa</td>
+            <td>Sunbird Ku Chawe</td>
+            <td>18 Apr 2026</td>
+            <td>20 Apr 2026</td>
+            <td><span class="status status-cancelled">Cancelled</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p style="text-align:center; margin-top: 40px; color: var(--gray); font-size: 0.85rem;">
+      © 2026 Sunbird Tourism PLC. CMS designed by <span style="color: var(--gold); font-weight: 600;">Velox Technologies</span> — veloxtech.mw@gmail.com
+    </p>
+  </main>
+</div>
+
+<script src="main.js"></script>
+</body>
+</html>
