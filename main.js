@@ -281,9 +281,34 @@ async function fakeSubmit(e, dynamicMessageOverride) {
         if (key && i.value && !payload[key]) payload[key] = i.value;
     });
 
+    // Capture global page dates/guests if missing from modal form
+    if (!payload.check_in || !payload.check_out) {
+        const pageDates = Array.from(document.querySelectorAll('input[type="date"]'));
+        if (pageDates.length >= 2) {
+            payload.check_in = pageDates[0].value;
+            payload.check_out = pageDates[1].value;
+        }
+    }
+    if (!payload.num_guests) {
+        const guestInput = document.querySelector('input[type="number"]');
+        if (guestInput) payload.num_guests = guestInput.value;
+    }
+
     try {
+        const isBookingModal = form.closest('#bookingModal');
         // BOOKING (Takes strictest priority mathematically)
-        if (payload.check_in && payload.check_out) {
+        if ((payload.check_in && payload.check_out) || isBookingModal) {
+            
+            // Auto-fill dates if still empty to ensure booking success gracefully
+            if (!payload.check_in) {
+                const t = new Date(); t.setDate(t.getDate()+1);
+                payload.check_in = t.toISOString().split('T')[0];
+            }
+            if (!payload.check_out) {
+                const t = new Date(); t.setDate(t.getDate()+3);
+                payload.check_out = t.toISOString().split('T')[0];
+            }
+
             const activePayTab = document.querySelector('.payment-detail:not(.hidden)');
             let payMethod = 'card';
             if (activePayTab && activePayTab.id.includes('airtel')) payMethod = 'airtel';

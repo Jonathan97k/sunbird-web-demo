@@ -41,6 +41,7 @@
       <li>🏨 Hotels</li>
       <li>🛏️ Rooms</li>
       <li>📅 Bookings</li>
+      <li>🛎️ Reception</li>
       <li>🎁 Promotions</li>
       <li>🖼️ Gallery</li>
       <li>⚙️ Settings</li>
@@ -81,6 +82,7 @@
             <th>Check-in</th>
             <th>Check-out</th>
             <th>Status</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -199,11 +201,12 @@ async function loadAdminDashboard() {
                         <td>${new Date(b.check_in).toLocaleDateString()}</td>
                         <td>${new Date(b.check_out).toLocaleDateString()}</td>
                         <td><span class="status ${statusClass}">${b.booking_status}</span></td>
+                        <td>${b.booking_status === 'pending' ? `<button class="btn btn-outline-primary" style="padding:2px 8px; font-size:0.75rem; border-color:var(--primary); color:var(--primary);" onclick="confirmBooking(${b.id}, this)">Confirm</button>` : ''}</td>
                     </tr>
                 `;
             }).join('');
         } else {
-            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">No bookings securely mapped globally currently actively effectively recorded.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;">No bookings securely mapped globally currently actively effectively recorded.</td></tr>`;
         }
 
     } catch(err) {
@@ -228,12 +231,39 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Admin Sidebar Navigation Mapping Logic natively
+// ==========================================
+// GALLERY IMAGE LIST (local project images)
+// ==========================================
+const GALLERY_IMAGES = [
+    'images/hero.jpg',
+    'images/livingstonia.jpg',
+    'images/livingstonia-7.jpg',
+    'images/sunbird-mount-soche.jpg',
+    'images/room-1.jpg',
+    'images/Caucus.jpg',
+    'images/img-20210923-wa01837279225462797015705.jpg',
+    'images/images (1).jpeg',
+    'images/images (2).jpeg',
+    'images/images (3).jpeg',
+    'images/images (4).jpeg',
+    'images/images (5).jpeg',
+    'images/images (6).jpeg',
+    'images/images (7).jpeg',
+    'images/images (8).jpeg',
+    'images/images.jpeg',
+    'images/2.jpg',
+    'images/1732179921762.jpeg',
+    'images/1742828860302.jpeg',
+    'images/1774509073437.jpeg'
+];
+
+// ==========================================
+// ADMIN NAVIGATION ROUTER
+// ==========================================
 function initAdminNavigation() {
     const tabs = document.querySelectorAll('.dash-nav li');
     tabs.forEach(tab => {
         tab.addEventListener('click', async (e) => {
-            // Ignore the Back to Site explicitly safely uniquely natively
             if (e.target.tagName === 'A') return;
 
             tabs.forEach(t => t.classList.remove('active'));
@@ -245,38 +275,45 @@ function initAdminNavigation() {
             mainContent.innerHTML = `<h2 style="margin-bottom:20px;">Loading ${tab.innerText}...</h2><div style="text-align:center;"><div class="spinner" style="display:inline-block; border-color:var(--primary); border-width:4px; width:40px; height:40px;"></div></div>`;
 
             try {
+                // ===== DASHBOARD =====
                 if (tabName.includes('dashboard')) {
-                    // Refactoring structurally specifically requiring DOM reload logic cleanly directly securely natively
                     mainContent.innerHTML = `
                         <h2>Dashboard Overview</h2>
                         <p style="color: var(--gray); margin-bottom: 30px;">Welcome back, Administrator. Here's what's happening today.</p>
                         <div class="stats-grid"></div>
                         <div class="dash-table-wrap">
                         <h3 style="margin-bottom: 20px;">Recent Bookings</h3>
-                        <table class="dash-table"><thead><tr><th>Guest</th><th>Hotel</th><th>Check-in</th><th>Check-out</th><th>Status</th></tr></thead><tbody></tbody></table>
+                        <table class="dash-table"><thead><tr><th>Guest</th><th>Hotel</th><th>Check-in</th><th>Check-out</th><th>Status</th><th>Action</th></tr></thead><tbody></tbody></table>
                         </div>
                         <p style="text-align:center; margin-top: 40px; color: var(--gray); font-size: 0.85rem;">© 2026 Sunbird Tourism PLC.</p>
                     `;
                     await loadAdminDashboard();
                 } 
+
+                // ===== HOTELS =====
                 else if (tabName.includes('hotels')) {
                     const data = await apiGet('/hotels');
                     mainContent.innerHTML = `
-                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:10px;">
                             <h2>Manage Hotels</h2>
-                            <button class="btn btn-primary" onclick="alert('Feature unlocking shortly securely.')">Add New Hotel</button>
+                            <button class="btn btn-primary" onclick="showAddHotelForm()">+ Add New Hotel</button>
                         </div>
+                        <div id="hotel-form-area"></div>
                         <div class="dash-table-wrap">
                         <table class="dash-table">
                             <thead><tr><th>Name</th><th>City</th><th>Category</th><th>Published</th><th>Actions</th></tr></thead>
                             <tbody>
                                 ${data.hotels.map(h => `
-                                    <tr>
+                                    <tr id="hotel-row-${h.id}">
                                         <td><strong>${h.name}</strong></td>
                                         <td>${h.city}</td>
                                         <td>${h.category}</td>
                                         <td><span class="status ${h.published ? 'status-confirmed' : 'status-cancelled'}">${h.published ? 'Live' : 'Hidden'}</span></td>
-                                        <td><button class="btn btn-outline-primary" style="padding:4px 10px; font-size:0.8rem;" onclick="alert('Edit mode locked.')">Edit</button></td>
+                                        <td style="display:flex;gap:6px;flex-wrap:wrap;">
+                                            <button class="btn btn-outline-primary" style="padding:4px 10px; font-size:0.8rem;" onclick="toggleHotelPublish(${h.id}, this)">
+                                                ${h.published ? 'Unpublish' : 'Publish'}
+                                            </button>
+                                        </td>
                                     </tr>
                                 `).join('')}
                             </tbody>
@@ -284,45 +321,718 @@ function initAdminNavigation() {
                         </div>
                     `;
                 }
+
+                // ===== ROOMS =====
+                else if (tabName.includes('rooms')) {
+                    const data = await apiGet('/hotels');
+                    const hotels = data.hotels || [];
+                    mainContent.innerHTML = `
+                        <h2>Room Management</h2>
+                        <p style="color:var(--gray); margin-bottom:20px;">Select a hotel to view and manage its rooms.</p>
+                        <div style="display:flex; gap:12px; align-items:center; margin-bottom:24px; flex-wrap:wrap;">
+                            <select id="rooms-hotel-selector" onchange="loadRoomsForHotel()" style="padding:10px 16px; border:1px solid var(--border); border-radius:8px; font-size:0.95rem; min-width:250px;">
+                                <option value="">— Select a Hotel —</option>
+                                ${hotels.map(h => `<option value="${h.slug}" data-id="${h.id}">${h.name} (${h.city})</option>`).join('')}
+                            </select>
+                        </div>
+                        <div id="rooms-content">
+                            <div style="text-align:center; padding:60px; background:#fff; border-radius:12px; border:1px solid var(--border);">
+                                <span style="font-size:2.5rem;">🏨</span>
+                                <h3 style="margin-top:12px; color:var(--gray);">Select a Hotel Above</h3>
+                                <p style="color:var(--gray); margin-top:8px;">Rooms will be displayed based on your selection.</p>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // ===== BOOKINGS =====
                 else if (tabName.includes('bookings')) {
                     const data = await apiGet('/bookings?limit=50');
                     mainContent.innerHTML = `
-                        <h2>All Database Bookings</h2>
-                        <p style="margin-bottom:20px;">Secure chronological overview mapping.</p>
+                        <h2>All Bookings</h2>
+                        <p style="margin-bottom:20px; color:var(--gray);">Complete chronological overview of all reservations.</p>
                         <div class="dash-table-wrap">
                         <table class="dash-table">
-                            <thead><tr><th>Reference</th><th>Guest</th><th>Hotel</th><th>Revenue</th><th>Status</th></tr></thead>
+                            <thead><tr><th>Reference</th><th>Guest</th><th>Hotel</th><th>Revenue</th><th>Status</th><th>Action</th></tr></thead>
                             <tbody>
-                                ${data.bookings.map(b => `
+                                ${data.bookings.length > 0 ? data.bookings.map(b => `
                                     <tr>
                                         <td style="font-family:monospace; color:var(--gray)">${b.booking_reference}</td>
                                         <td><strong>${b.guest_name}</strong><br><small>${b.guest_email}</small></td>
                                         <td>${b.hotel_name || 'Standard Hotel'}</td>
                                         <td>MWK ${Number(b.total_amount).toLocaleString()}</td>
                                         <td><span class="status ${b.booking_status==='confirmed'?'status-confirmed':(b.booking_status==='pending'?'status-pending':'status-cancelled')}">${b.booking_status}</span></td>
+                                        <td>${b.booking_status === 'pending' ? `<button class="btn btn-outline-primary" style="padding:4px 10px; font-size:0.8rem;" onclick="confirmBooking(${b.id}, this)">Confirm</button>` : ''}</td>
                                     </tr>
-                                `).join('')}
+                                `).join('') : '<tr><td colspan="6" style="text-align:center; padding:30px; color:var(--gray);">No bookings recorded yet.</td></tr>'}
                             </tbody>
                         </table>
                         </div>
                     `;
                 }
+
+                // ===== RECEPTION =====
+                else if (tabName.includes('reception')) {
+                    const [bookingsData, hotelsData] = await Promise.all([
+                        apiGet('/bookings?limit=100'),
+                        apiGet('/hotels')
+                    ]);
+                    const bookings = bookingsData.bookings || [];
+                    const hotels = hotelsData.hotels || [];
+
+                    // Categorize bookings
+                    const checkedIn = bookings.filter(b => b.booking_status === 'checked_in');
+                    const arriving = bookings.filter(b => b.booking_status === 'confirmed');
+                    const pending = bookings.filter(b => b.booking_status === 'pending');
+                    const history = bookings.filter(b => b.booking_status === 'checked_out' || b.booking_status === 'cancelled');
+
+                    function statusBadge(s) {
+                        const map = {
+                            'pending': 'status-pending',
+                            'confirmed': 'status-confirmed',
+                            'checked_in': 'status-confirmed',
+                            'checked_out': 'status-cancelled',
+                            'cancelled': 'status-cancelled'
+                        };
+                        return `<span class="status ${map[s] || 'status-pending'}" style="font-size:0.75rem;">${s.replace('_',' ')}</span>`;
+                    }
+
+                    function actionButtons(b) {
+                        const btns = [];
+                        if (b.booking_status === 'pending') {
+                            btns.push(`<button class="btn btn-outline-primary" style="padding:3px 8px;font-size:0.75rem;" onclick="receptionAction(${b.id},'confirmed',this)">Confirm</button>`);
+                            btns.push(`<button class="btn btn-outline-primary" style="padding:3px 8px;font-size:0.75rem;color:#d32f2f;border-color:#d32f2f;" onclick="receptionAction(${b.id},'cancelled',this)">Cancel</button>`);
+                        }
+                        if (b.booking_status === 'confirmed') {
+                            btns.push(`<button class="btn btn-primary" style="padding:3px 10px;font-size:0.75rem;background:#116530;" onclick="receptionAction(${b.id},'checked_in',this)">Check In</button>`);
+                            btns.push(`<button class="btn btn-outline-primary" style="padding:3px 8px;font-size:0.75rem;color:#d32f2f;border-color:#d32f2f;" onclick="receptionAction(${b.id},'cancelled',this)">Cancel</button>`);
+                        }
+                        if (b.booking_status === 'checked_in') {
+                            btns.push(`<button class="btn btn-primary" style="padding:3px 10px;font-size:0.75rem;background:#8B0000;" onclick="receptionAction(${b.id},'checked_out',this)">Check Out</button>`);
+                        }
+                        return btns.join(' ');
+                    }
+
+                    function bookingRow(b) {
+                        return `<tr id="reception-row-${b.id}">
+                            <td style="font-family:monospace;font-size:0.8rem;color:var(--gray);">${b.booking_reference}</td>
+                            <td><strong>${b.guest_name}</strong><br><small style="color:var(--gray);">${b.guest_phone || ''}</small></td>
+                            <td>${b.hotel_name || '—'}</td>
+                            <td>${b.room_name || 'Room #' + b.room_id}</td>
+                            <td>${new Date(b.check_in).toLocaleDateString()}</td>
+                            <td>${new Date(b.check_out).toLocaleDateString()}</td>
+                            <td>${statusBadge(b.booking_status)}</td>
+                            <td style="white-space:nowrap;">${actionButtons(b)}</td>
+                        </tr>`;
+                    }
+
+                    mainContent.innerHTML = `
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:10px;">
+                            <h2>🛎️ Reception Desk</h2>
+                            <button class="btn btn-primary" onclick="toggleWalkinForm()">+ Walk-in Booking</button>
+                        </div>
+                        <p style="color:var(--gray); margin-bottom:20px;">Manage guest arrivals, check-ins, and check-outs. Room availability updates automatically across the entire system.</p>
+
+                        <!-- Quick Stats -->
+                        <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(160px,1fr)); gap:12px; margin-bottom:28px;">
+                            <div style="background:#fff; border-radius:10px; padding:16px 20px; border-left:4px solid #116530;">
+                                <div style="font-size:1.6rem; font-weight:700; color:#116530;">${checkedIn.length}</div>
+                                <div style="font-size:0.82rem; color:var(--gray);">Currently In-House</div>
+                            </div>
+                            <div style="background:#fff; border-radius:10px; padding:16px 20px; border-left:4px solid #1976D2;">
+                                <div style="font-size:1.6rem; font-weight:700; color:#1976D2;">${arriving.length}</div>
+                                <div style="font-size:0.82rem; color:var(--gray);">Expected Arrivals</div>
+                            </div>
+                            <div style="background:#fff; border-radius:10px; padding:16px 20px; border-left:4px solid #F57C00;">
+                                <div style="font-size:1.6rem; font-weight:700; color:#F57C00;">${pending.length}</div>
+                                <div style="font-size:0.82rem; color:var(--gray);">Pending Confirmation</div>
+                            </div>
+                        </div>
+
+                        <!-- Walk-in Form -->
+                        <div id="walkin-form-area" style="display:none; background:#fff; padding:24px; border-radius:12px; border:1px solid var(--border); margin-bottom:24px;">
+                            <h3 style="margin-bottom:16px;">Create Walk-in Booking</h3>
+                            <form id="walkin-form" onsubmit="submitWalkin(event)">
+                                <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+                                    <div class="form-group"><label>Guest Name *</label><input type="text" id="walkin-name" required placeholder="John Banda"></div>
+                                    <div class="form-group"><label>Phone *</label><input type="tel" id="walkin-phone" required placeholder="+265 888 123 456"></div>
+                                    <div class="form-group"><label>Email</label><input type="email" id="walkin-email" placeholder="guest@email.com"></div>
+                                    <div class="form-group"><label>Hotel *</label>
+                                        <select id="walkin-hotel" required onchange="loadWalkinRooms()">
+                                            <option value="">Select Hotel</option>
+                                            ${hotels.map(h => `<option value="${h.id}" data-slug="${h.slug}">${h.name}</option>`).join('')}
+                                        </select>
+                                    </div>
+                                    <div class="form-group"><label>Room *</label>
+                                        <select id="walkin-room" required>
+                                            <option value="">Select hotel first</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group"><label>Guests</label><input type="number" id="walkin-guests" min="1" value="1"></div>
+                                    <div class="form-group"><label>Check-in *</label><input type="date" id="walkin-checkin" required></div>
+                                    <div class="form-group"><label>Check-out *</label><input type="date" id="walkin-checkout" required></div>
+                                </div>
+                                <div class="form-group" style="margin-top:12px;"><label>Payment Method</label>
+                                    <select id="walkin-payment">
+                                        <option value="card">Card</option>
+                                        <option value="airtel">Airtel Money</option>
+                                        <option value="tnm">TNM Mpamba</option>
+                                    </select>
+                                </div>
+                                <div style="display:flex; gap:10px; margin-top:14px;">
+                                    <button type="submit" class="btn btn-primary">Create & Check In</button>
+                                    <button type="button" class="btn btn-outline-primary" onclick="toggleWalkinForm()">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- In-House Guests -->
+                        ${checkedIn.length > 0 ? `
+                        <div class="dash-table-wrap" style="margin-bottom:24px;">
+                            <h3 style="margin-bottom:14px; color:#116530;">🟢 Currently In-House (${checkedIn.length})</h3>
+                            <table class="dash-table"><thead><tr><th>Ref</th><th>Guest</th><th>Hotel</th><th>Room</th><th>In</th><th>Out</th><th>Status</th><th>Action</th></tr></thead>
+                            <tbody>${checkedIn.map(bookingRow).join('')}</tbody></table>
+                        </div>` : ''}
+
+                        <!-- Expected Arrivals -->
+                        ${arriving.length > 0 ? `
+                        <div class="dash-table-wrap" style="margin-bottom:24px;">
+                            <h3 style="margin-bottom:14px; color:#1976D2;">🔵 Expected Arrivals (${arriving.length})</h3>
+                            <table class="dash-table"><thead><tr><th>Ref</th><th>Guest</th><th>Hotel</th><th>Room</th><th>In</th><th>Out</th><th>Status</th><th>Action</th></tr></thead>
+                            <tbody>${arriving.map(bookingRow).join('')}</tbody></table>
+                        </div>` : ''}
+
+                        <!-- Pending -->
+                        ${pending.length > 0 ? `
+                        <div class="dash-table-wrap" style="margin-bottom:24px;">
+                            <h3 style="margin-bottom:14px; color:#F57C00;">🟠 Pending Confirmation (${pending.length})</h3>
+                            <table class="dash-table"><thead><tr><th>Ref</th><th>Guest</th><th>Hotel</th><th>Room</th><th>In</th><th>Out</th><th>Status</th><th>Action</th></tr></thead>
+                            <tbody>${pending.map(bookingRow).join('')}</tbody></table>
+                        </div>` : ''}
+
+                        <!-- History -->
+                        ${history.length > 0 ? `
+                        <div class="dash-table-wrap">
+                            <details>
+                                <summary style="cursor:pointer; font-weight:600; padding:10px 0; color:var(--gray);">📋 Booking History (${history.length}) — click to expand</summary>
+                                <table class="dash-table" style="margin-top:12px;"><thead><tr><th>Ref</th><th>Guest</th><th>Hotel</th><th>Room</th><th>In</th><th>Out</th><th>Status</th><th>Action</th></tr></thead>
+                                <tbody>${history.map(bookingRow).join('')}</tbody></table>
+                            </details>
+                        </div>` : ''}
+
+                        ${bookings.length === 0 ? '<div style="text-align:center; padding:60px; background:#fff; border-radius:12px; border:1px solid var(--border);"><span style="font-size:2.5rem;">🛎️</span><h3 style="margin-top:12px; color:var(--gray);">No Bookings Yet</h3><p style="color:var(--gray); margin-top:8px;">Create a walk-in booking or wait for online reservations.</p></div>' : ''}
+                    `;
+                }
+
+                // ===== PROMOTIONS =====
+                else if (tabName.includes('promotions')) {
+                    let offers = [];
+                    try {
+                        const offData = await apiGet('/offers');
+                        offers = offData.offers || [];
+                    } catch(e) {}
+                    const hotelsData = await apiGet('/hotels');
+                    const hotels = hotelsData.hotels || [];
+
+                    mainContent.innerHTML = `
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:10px;">
+                            <h2>Promotions & Offers</h2>
+                            <button class="btn btn-primary" onclick="togglePromoForm()">+ Add Promotion</button>
+                        </div>
+
+                        <div id="promo-form-area" style="display:none; background:#fff; padding:24px; border-radius:12px; border:1px solid var(--border); margin-bottom:24px;">
+                            <h3 style="margin-bottom:16px;">Create New Promotion</h3>
+                            <form id="add-promo-form" onsubmit="submitPromo(event)">
+                                <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+                                    <div class="form-group"><label>Title *</label><input type="text" id="promo-title" required placeholder="e.g. Easter Holiday Special"></div>
+                                    <div class="form-group"><label>Hotel</label>
+                                        <select id="promo-hotel">
+                                            <option value="">All Hotels</option>
+                                            ${hotels.map(h => `<option value="${h.id}">${h.name}</option>`).join('')}
+                                        </select>
+                                    </div>
+                                    <div class="form-group"><label>Discount (%)</label><input type="number" id="promo-discount" placeholder="e.g. 25" min="0" max="100"></div>
+                                    <div class="form-group"><label>Price From (MWK)</label><input type="number" id="promo-price" placeholder="e.g. 65000"></div>
+                                    <div class="form-group"><label>Valid From</label><input type="date" id="promo-from"></div>
+                                    <div class="form-group"><label>Valid Until *</label><input type="date" id="promo-until" required></div>
+                                </div>
+                                <div class="form-group" style="margin-top:12px;"><label>Description</label><textarea id="promo-desc" rows="3" placeholder="Describe the offer..." style="width:100%; padding:10px; border:1px solid var(--border); border-radius:8px; font-family:inherit;"></textarea></div>
+                                <div style="display:flex; gap:10px; margin-top:14px;">
+                                    <button type="submit" class="btn btn-primary">Save Promotion</button>
+                                    <button type="button" class="btn btn-outline-primary" onclick="togglePromoForm()">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="dash-table-wrap">
+                        <table class="dash-table">
+                            <thead><tr><th>Title</th><th>Hotel</th><th>Discount</th><th>Valid Until</th><th>Status</th><th>Actions</th></tr></thead>
+                            <tbody id="promo-table-body">
+                                ${offers.length > 0 ? offers.map(o => `
+                                    <tr id="promo-row-${o.id}">
+                                        <td><strong>${o.title}</strong><br><small style="color:var(--gray);">${(o.description||'').substring(0,50)}${(o.description||'').length>50?'...':''}</small></td>
+                                        <td>${o.hotel_name || 'All Hotels'}</td>
+                                        <td>${o.discount_percent ? o.discount_percent + '%' : '—'}</td>
+                                        <td>${o.valid_until ? new Date(o.valid_until).toLocaleDateString() : '—'}</td>
+                                        <td><span class="status ${o.active ? 'status-confirmed' : 'status-cancelled'}">${o.active ? 'Active' : 'Inactive'}</span></td>
+                                        <td><button class="btn btn-outline-primary" style="padding:4px 10px; font-size:0.8rem; color:#d32f2f; border-color:#d32f2f;" onclick="deletePromo(${o.id})">Delete</button></td>
+                                    </tr>
+                                `).join('') : '<tr><td colspan="6" style="text-align:center; padding:30px; color:var(--gray);">No promotions created yet. Click "+ Add Promotion" to get started.</td></tr>'}
+                            </tbody>
+                        </table>
+                        </div>
+                    `;
+                }
+
+                // ===== GALLERY =====
+                else if (tabName.includes('gallery')) {
+                    mainContent.innerHTML = `
+                        <h2>Gallery Management</h2>
+                        <p style="color:var(--gray); margin-bottom:24px;">All images available in the project directory. These images are used across the website.</p>
+                        <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:16px;" id="gallery-grid">
+                            ${GALLERY_IMAGES.map((img, idx) => `
+                                <div style="border-radius:12px; overflow:hidden; border:1px solid var(--border); background:#fff; transition: transform 0.2s, box-shadow 0.2s; cursor:pointer;" 
+                                     onmouseenter="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.12)';" 
+                                     onmouseleave="this.style.transform=''; this.style.boxShadow='';"
+                                     onclick="openGalleryPreview('${img}')">
+                                    <div style="width:100%; height:180px; background:url('${img}') center/cover no-repeat; background-color:#f5f5f5;"></div>
+                                    <div style="padding:10px 14px;">
+                                        <p style="font-size:0.82rem; color:var(--gray); word-break:break-all;">${img.split('/').pop()}</p>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        <div id="gallery-preview-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; justify-content:center; align-items:center; cursor:pointer;" onclick="this.style.display='none';">
+                            <img id="gallery-preview-img" src="" style="max-width:90%; max-height:90%; border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,0.5);">
+                        </div>
+                    `;
+                }
+
+                // ===== SETTINGS =====
+                else if (tabName.includes('settings')) {
+                    const savedSettings = JSON.parse(localStorage.getItem('sunbird_admin_settings') || '{}');
+                    mainContent.innerHTML = `
+                        <h2>Site Settings</h2>
+                        <p style="color:var(--gray); margin-bottom:24px;">Manage site-wide configuration and preferences.</p>
+
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; max-width:900px;">
+                            <div style="background:#fff; padding:24px; border-radius:12px; border:1px solid var(--border);">
+                                <h3 style="margin-bottom:16px; font-size:1.1rem;">🏢 Company Information</h3>
+                                <div class="form-group"><label>Company Name *</label><input type="text" id="set-company" value="${savedSettings.company || 'Sunbird Tourism PLC'}" required></div>
+                                <div class="form-group"><label>Tagline</label><input type="text" id="set-tagline" value="${savedSettings.tagline || 'Malawi\'s Premier Hospitality Group'}"></div>
+                                <div class="form-group"><label>Primary Contact Email *</label><input type="email" id="set-email" value="${savedSettings.email || 'centralres@sunbirdmalawi.com'}" required></div>
+                                <div class="form-group"><label>Phone Number *</label><input type="tel" id="set-phone" value="${savedSettings.phone || '0111 773 388'}" required></div>
+                            </div>
+
+                            <div style="background:#fff; padding:24px; border-radius:12px; border:1px solid var(--border);">
+                                <h3 style="margin-bottom:16px; font-size:1.1rem;">🌐 Website Settings</h3>
+                                <div class="form-group"><label>Currency Code</label><input type="text" id="set-currency" value="${savedSettings.currency || 'MWK'}" maxlength="3"></div>
+                                <div class="form-group"><label>Default Check-in Time</label><input type="time" id="set-checkin-time" value="${savedSettings.checkinTime || '14:00'}"></div>
+                                <div class="form-group"><label>Default Check-out Time</label><input type="time" id="set-checkout-time" value="${savedSettings.checkoutTime || '10:00'}"></div>
+                                <div class="form-group"><label>WhatsApp Number</label><input type="tel" id="set-whatsapp" value="${savedSettings.whatsapp || '+265 888 123 456'}"></div>
+                            </div>
+
+                            <div style="background:#fff; padding:24px; border-radius:12px; border:1px solid var(--border);">
+                                <h3 style="margin-bottom:16px; font-size:1.1rem;">📍 Address</h3>
+                                <div class="form-group"><label>Head Office Address *</label><input type="text" id="set-address" value="${savedSettings.address || '28 Glyn Jones Road, Blantyre'}" required></div>
+                                <div class="form-group"><label>Google Maps URL</label><input type="url" id="set-maps" value="${savedSettings.mapsUrl || ''}" placeholder="https://maps.google.com/..."></div>
+                            </div>
+
+                            <div style="background:#fff; padding:24px; border-radius:12px; border:1px solid var(--border);">
+                                <h3 style="margin-bottom:16px; font-size:1.1rem;">🔐 Security</h3>
+                                <div class="form-group"><label>Admin Session</label>
+                                    <p style="font-size:0.85rem; color:var(--gray); margin-bottom:8px;">Logged in as administrator. Token stored in browser.</p>
+                                    <button class="btn btn-outline-primary" style="color:#d32f2f; border-color:#d32f2f;" onclick="adminLogout()">🚪 Logout & Clear Session</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top:24px;">
+                            <button class="btn btn-primary" onclick="saveAdminSettings()" style="padding:12px 32px;">💾 Save All Settings</button>
+                        </div>
+                    `;
+                }
+
                 else {
                     mainContent.innerHTML = `
                         <h2>${tab.innerText}</h2>
                         <div style="text-align:center; padding: 60px; background:#fff; border-radius:12px; margin-top:20px; border:1px solid var(--border);">
                             <span style="font-size:3rem;">🚧</span>
                             <h3 style="margin-top:10px;">Module Under Construction</h3>
-                            <p style="color:var(--gray); margin-top:10px;">This feature is currently formally structurally explicitly securely locked.</p>
+                            <p style="color:var(--gray); margin-top:10px;">This feature is coming soon.</p>
                         </div>
                     `;
                 }
             } catch (err) {
-                mainContent.innerHTML = `<h2>Error securely loading ${tab.innerText}</h2><p style="color:red">${err.message}</p>`;
+                mainContent.innerHTML = `<h2>Error loading ${tab.innerText}</h2><p style="color:red">${err.message}</p>`;
             }
         });
     });
 }
+
+// ==========================================
+// BOOKING CONFIRM
+// ==========================================
+window.confirmBooking = async function(id, btn) {
+    if (!confirm('Confirm this booking?')) return;
+    const og = btn.innerText;
+    btn.innerText = '...';
+    try {
+        await apiPatch('/bookings/' + id + '/status', { status: 'confirmed' });
+        const tr = btn.closest('tr');
+        const span = tr.querySelector('.status');
+        if (span) {
+            span.className = 'status status-confirmed';
+            span.innerText = 'confirmed';
+        }
+        btn.remove();
+        alert('Booking confirmed successfully!');
+    } catch(err) {
+        alert(err.message || 'Failed to update booking status.');
+        btn.innerText = og;
+    }
+};
+
+// ==========================================
+// HOTEL PUBLISH TOGGLE
+// ==========================================
+window.toggleHotelPublish = async function(id, btn) {
+    const og = btn.innerText;
+    btn.innerText = '...';
+    try {
+        const res = await apiPatch('/hotels/' + id + '/publish');
+        const row = document.getElementById('hotel-row-' + id);
+        const statusSpan = row.querySelector('.status');
+        if (res.hotel.published) {
+            statusSpan.className = 'status status-confirmed';
+            statusSpan.innerText = 'Live';
+            btn.innerText = 'Unpublish';
+        } else {
+            statusSpan.className = 'status status-cancelled';
+            statusSpan.innerText = 'Hidden';
+            btn.innerText = 'Publish';
+        }
+    } catch(err) {
+        alert(err.message || 'Failed to toggle publish status.');
+        btn.innerText = og;
+    }
+};
+
+// ==========================================
+// ADD HOTEL FORM
+// ==========================================
+window.showAddHotelForm = function() {
+    const area = document.getElementById('hotel-form-area');
+    if (area.innerHTML) { area.innerHTML = ''; return; }
+    area.innerHTML = `
+        <div style="background:#fff; padding:24px; border-radius:12px; border:1px solid var(--border); margin-bottom:24px;">
+            <h3 style="margin-bottom:16px;">Add New Hotel</h3>
+            <form onsubmit="submitNewHotel(event)">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+                    <div class="form-group"><label>Hotel Name *</label><input type="text" id="new-hotel-name" required placeholder="e.g. Sunbird Mzuzu"></div>
+                    <div class="form-group"><label>Slug *</label><input type="text" id="new-hotel-slug" required placeholder="e.g. mzuzu"></div>
+                    <div class="form-group"><label>City *</label><input type="text" id="new-hotel-city" required placeholder="e.g. Mzuzu"></div>
+                    <div class="form-group"><label>Category</label>
+                        <select id="new-hotel-category">
+                            <option value="city">City</option>
+                            <option value="lakeside">Lakeside</option>
+                            <option value="mountain">Mountain</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group" style="margin-top:12px;"><label>Short Description</label><input type="text" id="new-hotel-desc" placeholder="A brief description..."></div>
+                <div style="display:flex; gap:10px; margin-top:14px;">
+                    <button type="submit" class="btn btn-primary">Create Hotel</button>
+                    <button type="button" class="btn btn-outline-primary" onclick="document.getElementById('hotel-form-area').innerHTML=''">Cancel</button>
+                </div>
+            </form>
+        </div>
+    `;
+};
+
+window.submitNewHotel = async function(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('button[type="submit"]');
+    btn.innerText = 'Creating...';
+    try {
+        await apiPost('/hotels', {
+            name: document.getElementById('new-hotel-name').value,
+            slug: document.getElementById('new-hotel-slug').value,
+            city: document.getElementById('new-hotel-city').value,
+            category: document.getElementById('new-hotel-category').value,
+            short_description: document.getElementById('new-hotel-desc').value,
+            published: true
+        });
+        alert('Hotel created successfully!');
+        // Reload the Hotels tab
+        document.querySelectorAll('.dash-nav li').forEach(t => {
+            if (t.innerText.toLowerCase().includes('hotels')) t.click();
+        });
+    } catch(err) {
+        alert(err.message || 'Failed to create hotel.');
+        btn.innerText = 'Create Hotel';
+    }
+};
+
+// ==========================================
+// ROOMS MANAGEMENT (filtered by hotel)
+// ==========================================
+window.loadRoomsForHotel = async function() {
+    const sel = document.getElementById('rooms-hotel-selector');
+    const slug = sel.value;
+    const container = document.getElementById('rooms-content');
+
+    if (!slug) {
+        container.innerHTML = `
+            <div style="text-align:center; padding:60px; background:#fff; border-radius:12px; border:1px solid var(--border);">
+                <span style="font-size:2.5rem;">🏨</span>
+                <h3 style="margin-top:12px; color:var(--gray);">Select a Hotel Above</h3>
+                <p style="color:var(--gray); margin-top:8px;">Rooms will be displayed based on your selection.</p>
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = '<div style="text-align:center; padding:40px;"><div class="spinner" style="display:inline-block; border-color:var(--primary); border-width:4px; width:40px; height:40px;"></div></div>';
+
+    try {
+        const data = await apiGet('/hotels/' + slug);
+        const hotel = data.hotel;
+        const rooms = hotel.rooms || [];
+        const hotelId = hotel.id;
+
+        container.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+                <h3>${hotel.name} — ${rooms.length} Room(s)</h3>
+            </div>
+            ${rooms.length > 0 ? `
+                <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:16px;">
+                    ${rooms.map(r => `
+                        <div style="background:#fff; border-radius:12px; border:1px solid var(--border); padding:20px; transition: transform 0.2s;" onmouseenter="this.style.transform='translateY(-3px)'" onmouseleave="this.style.transform=''">
+                            <div style="display:flex; justify-content:space-between; align-items:start;">
+                                <h4 style="margin-bottom:6px;">${r.name}</h4>
+                                <span class="status ${r.available ? 'status-confirmed' : 'status-cancelled'}" style="font-size:0.7rem;">${r.available ? 'Available' : 'Unavailable'}</span>
+                            </div>
+                            <p style="font-size:1.2rem; font-weight:700; color:var(--primary); margin-bottom:8px;">MWK ${Number(r.price_mwk).toLocaleString()}<span style="font-size:0.8rem; font-weight:400; color:var(--gray);"> /night</span></p>
+                            <p style="color:var(--gray); font-size:0.85rem; margin-bottom:6px;">${r.description || 'Standard room accommodation'}</p>
+                            <p style="font-size:0.82rem; color:var(--gray);">👥 Max Guests: ${r.max_guests || 2}</p>
+                            ${r.amenities && r.amenities.length ? `<p style="font-size:0.82rem; color:var(--gray); margin-top:4px;">🏷️ ${r.amenities.join(', ')}</p>` : ''}
+                        </div>
+                    `).join('')}
+                </div>
+            ` : `
+                <div style="text-align:center; padding:48px; background:#fff; border-radius:12px; border:1px solid var(--border);">
+                    <span style="font-size:2rem;">🛏️</span>
+                    <h3 style="margin-top:10px; color:var(--gray);">No Rooms Found</h3>
+                    <p style="color:var(--gray); margin-top:8px;">This hotel does not have any rooms configured in the database yet.</p>
+                </div>
+            `}
+        `;
+    } catch(err) {
+        container.innerHTML = `<p style="color:red;">Error loading rooms: ${err.message}</p>`;
+    }
+};
+
+// ==========================================
+// PROMOTIONS
+// ==========================================
+window.togglePromoForm = function() {
+    const area = document.getElementById('promo-form-area');
+    area.style.display = area.style.display === 'none' ? 'block' : 'none';
+};
+
+window.submitPromo = async function(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('button[type="submit"]');
+    btn.innerText = 'Saving...';
+    try {
+        await apiPost('/offers', {
+            title: document.getElementById('promo-title').value,
+            description: document.getElementById('promo-desc').value,
+            discount_percent: parseInt(document.getElementById('promo-discount').value) || 0,
+            price_from_mwk: parseInt(document.getElementById('promo-price').value) || 0,
+            hotel_id: document.getElementById('promo-hotel').value ? parseInt(document.getElementById('promo-hotel').value) : null,
+            valid_from: document.getElementById('promo-from').value || null,
+            valid_until: document.getElementById('promo-until').value,
+            active: true
+        });
+        alert('Promotion created successfully!');
+        // Reload Promotions tab
+        document.querySelectorAll('.dash-nav li').forEach(t => {
+            if (t.innerText.toLowerCase().includes('promotions')) t.click();
+        });
+    } catch(err) {
+        alert(err.message || 'Failed to create promotion.');
+        btn.innerText = 'Save Promotion';
+    }
+};
+
+window.deletePromo = async function(id) {
+    if (!confirm('Permanently delete this promotion?')) return;
+    try {
+        await apiDelete('/offers/' + id);
+        const row = document.getElementById('promo-row-' + id);
+        if (row) row.remove();
+        alert('Promotion deleted.');
+    } catch(err) {
+        alert(err.message || 'Failed to delete promotion.');
+    }
+};
+
+// ==========================================
+// GALLERY PREVIEW
+// ==========================================
+window.openGalleryPreview = function(src) {
+    const overlay = document.getElementById('gallery-preview-overlay');
+    const img = document.getElementById('gallery-preview-img');
+    img.src = src;
+    overlay.style.display = 'flex';
+};
+
+// ==========================================
+// SETTINGS
+// ==========================================
+window.saveAdminSettings = function() {
+    const company = document.getElementById('set-company').value;
+    const email = document.getElementById('set-email').value;
+    const phone = document.getElementById('set-phone').value;
+    const address = document.getElementById('set-address').value;
+
+    if (!company || !email || !phone || !address) {
+        alert('Please fill in all required fields marked with *');
+        return;
+    }
+
+    const settings = {
+        company,
+        tagline: document.getElementById('set-tagline').value,
+        email,
+        phone,
+        currency: document.getElementById('set-currency').value,
+        checkinTime: document.getElementById('set-checkin-time').value,
+        checkoutTime: document.getElementById('set-checkout-time').value,
+        whatsapp: document.getElementById('set-whatsapp').value,
+        address,
+        mapsUrl: document.getElementById('set-maps').value
+    };
+    localStorage.setItem('sunbird_admin_settings', JSON.stringify(settings));
+    alert('Settings saved successfully!');
+};
+
+window.adminLogout = function() {
+    if (!confirm('Logout and clear your admin session?')) return;
+    clearToken();
+    sessionStorage.removeItem('sunbird_hotels_data');
+    location.reload();
+};
+
+// ==========================================
+// RECEPTION FUNCTIONS
+// ==========================================
+window.receptionAction = async function(bookingId, newStatus, btn) {
+    const labels = {
+        'confirmed': 'Confirm this booking?',
+        'cancelled': 'Cancel this booking? The room will be freed.',
+        'checked_in': 'Check in this guest? The room will be marked as occupied.',
+        'checked_out': 'Check out this guest? The room will be freed and made available.'
+    };
+    if (!confirm(labels[newStatus] || 'Update this booking?')) return;
+    
+    const og = btn.innerText;
+    btn.innerText = '...';
+    btn.disabled = true;
+
+    try {
+        await apiPatch('/bookings/' + bookingId + '/status', { status: newStatus });
+        alert('Booking updated to: ' + newStatus.replace('_', ' '));
+        // Reload the reception tab to show updated data
+        document.querySelectorAll('.dash-nav li').forEach(t => {
+            if (t.innerText.toLowerCase().includes('reception')) t.click();
+        });
+    } catch(err) {
+        alert(err.message || 'Failed to update booking.');
+        btn.innerText = og;
+        btn.disabled = false;
+    }
+};
+
+window.toggleWalkinForm = function() {
+    const area = document.getElementById('walkin-form-area');
+    if (area) area.style.display = area.style.display === 'none' ? 'block' : 'none';
+    // Set default check-in to today
+    const today = new Date().toISOString().split('T')[0];
+    const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+    const ci = document.getElementById('walkin-checkin');
+    const co = document.getElementById('walkin-checkout');
+    if (ci && !ci.value) ci.value = today;
+    if (co && !co.value) co.value = tomorrow;
+};
+
+window.loadWalkinRooms = async function() {
+    const hotelSelect = document.getElementById('walkin-hotel');
+    const roomSelect = document.getElementById('walkin-room');
+    const slug = hotelSelect.options[hotelSelect.selectedIndex]?.getAttribute('data-slug');
+    
+    if (!slug) {
+        roomSelect.innerHTML = '<option value="">Select hotel first</option>';
+        return;
+    }
+
+    roomSelect.innerHTML = '<option value="">Loading rooms...</option>';
+
+    try {
+        const data = await apiGet('/hotels/' + slug);
+        const rooms = (data.hotel && data.hotel.rooms) || [];
+        const available = rooms.filter(r => r.available);
+        
+        if (available.length > 0) {
+            roomSelect.innerHTML = available.map(r => 
+                `<option value="${r.id}">` + r.name + ` — MWK ${Number(r.price_mwk).toLocaleString()}/night</option>`
+            ).join('');
+        } else {
+            roomSelect.innerHTML = '<option value="">No available rooms</option>';
+        }
+    } catch(err) {
+        roomSelect.innerHTML = '<option value="">Error loading rooms</option>';
+    }
+};
+
+window.submitWalkin = async function(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('button[type="submit"]');
+    btn.innerText = 'Creating...';
+
+    try {
+        // Step 1: Create the booking
+        const bookingRes = await apiPost('/bookings', {
+            hotel_id: parseInt(document.getElementById('walkin-hotel').value),
+            room_id: parseInt(document.getElementById('walkin-room').value),
+            guest_name: document.getElementById('walkin-name').value,
+            guest_email: document.getElementById('walkin-email').value || 'walkin@sunbird.mw',
+            guest_phone: document.getElementById('walkin-phone').value,
+            check_in: document.getElementById('walkin-checkin').value,
+            check_out: document.getElementById('walkin-checkout').value,
+            num_guests: parseInt(document.getElementById('walkin-guests').value) || 1,
+            payment_method: document.getElementById('walkin-payment').value
+        });
+
+        // Step 2: Immediately check the guest in
+        if (bookingRes.booking && bookingRes.booking.id) {
+            await apiPatch('/bookings/' + bookingRes.booking.id + '/status', { status: 'checked_in' });
+        }
+
+        alert('Walk-in guest checked in successfully! Ref: ' + (bookingRes.booking?.booking_reference || ''));
+        
+        // Reload reception tab
+        document.querySelectorAll('.dash-nav li').forEach(t => {
+            if (t.innerText.toLowerCase().includes('reception')) t.click();
+        });
+    } catch(err) {
+        alert(err.message || 'Failed to create walk-in booking.');
+        btn.innerText = 'Create & Check In';
+    }
+};
 </script>
 </body>
 </html>

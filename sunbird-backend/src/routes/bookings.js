@@ -214,21 +214,35 @@ router.patch('/:id/status', requireAuth, async (req, res) => {
         const { id } = req.params;
         const { status } = req.body;
 
-        if (!['confirmed', 'cancelled', 'pending'].includes(status)) {
-            return res.status(400).json({ error: 'Parameter inherently formally bypassed required configuration logic explicitly.' });
+        const validStatuses = ['confirmed', 'cancelled', 'pending', 'checked_in', 'checked_out'];
+        if (!validStatuses.includes(status)) {
+            return res.status(400).json({ error: 'Invalid booking status. Valid options: ' + validStatuses.join(', ') });
         }
 
         const result = await db.query(`UPDATE bookings SET booking_status = $1 WHERE id = $2 RETURNING *`, [status, id]);
 
         if (result.rows.length === 0) {
-            return res.status(404).json({ error: 'Explicit physical entity bypass globally recorded.' });
+            return res.status(404).json({ error: 'Booking not found.' });
         }
 
-        res.status(200).json({ message: 'Booking strictly globally updated formally securely.', booking: result.rows[0] });
+        const booking = result.rows[0];
+
+        // Toggle room availability based on booking status
+        if (booking.room_id) {
+            if (status === 'confirmed' || status === 'checked_in') {
+                // Room is now occupied — mark unavailable system-wide
+                await db.query('UPDATE rooms SET available = false WHERE id = $1', [booking.room_id]);
+            } else if (status === 'checked_out' || status === 'cancelled') {
+                // Room is freed — mark available system-wide
+                await db.query('UPDATE rooms SET available = true WHERE id = $1', [booking.room_id]);
+            }
+        }
+
+        res.status(200).json({ message: 'Booking status updated successfully.', booking });
 
     } catch (error) {
         console.error('PATCH status error:', error);
-        res.status(500).json({ error: 'Operation strictly physically blocked natively safely.' });
+        res.status(500).json({ error: 'Failed to update booking status.' });
     }
 });
 
