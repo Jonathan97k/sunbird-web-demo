@@ -1,0 +1,145 @@
+# Sunbird Tourism PLC - API Test Requests
+# Use this file with the "REST Client" extension in Visual Studio Code
+
+@baseUrl = http://localhost:3000/api
+
+### =====================================
+### 1. AUTHENTICATION
+### =====================================
+
+### Login (Run this FIRST to generate the authentication token!)
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@sunbirdmalawi.com",
+  "password": "admin123"
+}
+
+### Automatically capture the generated token from the previous request for all ADMIN routes below
+@token = {{login.response.body.token}}
+
+
+### =====================================
+### 2. PUBLIC HOTEL & BOOKING ROUTES
+### =====================================
+
+### Get all Hotels (Includes active routing parameters)
+GET {{baseUrl}}/hotels?page=1&limit=5
+
+### Get Hotels Filtered (e.g., lakeside properties only)
+GET {{baseUrl}}/hotels?category=lakeside
+
+### Get Single Hotel (Sunbird Capital)
+GET {{baseUrl}}/hotels/capital
+
+### Get Single Hotel Rooms
+GET {{baseUrl}}/hotels/capital/rooms
+
+### Create a new Booking
+POST {{baseUrl}}/bookings
+Content-Type: application/json
+
+{
+  "hotel_id": 1,
+  "room_id": 1,
+  "guest_name": "Demo Guest",
+  "guest_email": "demo@example.com",
+  "guest_phone": "+265 999 123 456",
+  "check_in": "2026-05-10",
+  "check_out": "2026-05-15",
+  "num_guests": 2,
+  "payment_method": "card",
+  "special_requests": "Ocean view preferred"
+}
+
+
+### =====================================
+### 3. ADMIN BOOKING MANAGEMENT (Token Required)
+### =====================================
+
+### Get Admin Analytics / Statistics Summary
+GET {{baseUrl}}/bookings/stats/summary
+Authorization: Bearer {{token}}
+
+### Get All Bookings securely
+GET {{baseUrl}}/bookings?limit=10
+Authorization: Bearer {{token}}
+
+### Update Booking Status to Confirmed (Replace '1' with actual booking ID if needed)
+PATCH {{baseUrl}}/bookings/1/status
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "status": "confirmed"
+}
+
+### Update Payment Status to Paid
+PATCH {{baseUrl}}/bookings/1/payment
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "status": "paid"
+}
+
+
+### =====================================
+### 4. ENQUIRIES & OFFERS
+### =====================================
+
+### Submit a Public Contact Enquiry
+POST {{baseUrl}}/enquiries
+Content-Type: application/json
+
+{
+  "name": "Corporate Event Planner",
+  "email": "events@corporatcorp.com",
+  "phone": "0888 123 456",
+  "enquiry_type": "event",
+  "event_type": "conference",
+  "num_delegates": 100,
+  "message": "We need quotes for a corporate conference."
+}
+
+### Get all Enquiries (Admin)
+GET {{baseUrl}}/enquiries?is_read=false
+Authorization: Bearer {{token}}
+
+### Get All Active Offers (Public)
+GET {{baseUrl}}/offers
+
+### Create a New Promotional Offer (Admin)
+POST {{baseUrl}}/offers
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "Summer Flash Sale",
+  "description": "Book within 48 hours for extreme savings.",
+  "discount_percent": 30,
+  "price_from_mwk": 65000,
+  "hotel_id": null,
+  "valid_from": "2026-06-01",
+  "valid_until": "2026-08-01",
+  "active": true
+}
+
+
+### =====================================
+### 5. NEWSLETTER
+### =====================================
+
+### Subscribe to Newsletter (Public)
+POST {{baseUrl}}/newsletter
+Content-Type: application/json
+
+{
+  "email": "excited.customer@example.com"
+}
+
+### View Subscribers (Admin)
+GET {{baseUrl}}/newsletter
+Authorization: Bearer {{token}}
