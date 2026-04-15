@@ -517,9 +517,9 @@
                                         <td>Airtel Money</td>
                                         <td><span class='status status-confirmed'>Confirmed</span></td>
                                         <td>
-                                            <button class='btn-action view-btn' data-booking='SB-2026-0847'>👁 View</button>
-                                            <button class='btn-action edit-btn'>✏ Edit</button>
-                                            <button class='btn-action cancel-btn'>❌ Cancel</button>
+                                            <button type="button" class='btn-action view-btn' data-booking='SB-2026-0847'>👁 View</button>
+                                            <button type="button" class='btn-action edit-btn'>✏ Edit</button>
+                                            <button type="button" class='btn-action cancel-btn'>❌ Cancel</button>
                                         </td>
                                     </tr>
                                     <tr>
@@ -533,9 +533,9 @@
                                         <td>Card</td>
                                         <td><span class='status status-confirmed'>Confirmed</span></td>
                                         <td>
-                                            <button class='btn-action view-btn' data-booking='SB-2026-0846'>👁 View</button>
-                                            <button class='btn-action edit-btn'>✏ Edit</button>
-                                            <button class='btn-action cancel-btn'>❌ Cancel</button>
+                                            <button type="button" class='btn-action view-btn' data-booking='SB-2026-0846'>👁 View</button>
+                                            <button type="button" class='btn-action edit-btn'>✏ Edit</button>
+                                            <button type="button" class='btn-action cancel-btn'>❌ Cancel</button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -1001,6 +1001,16 @@
                     const id = v.getAttribute('data-booking');
                     if (id) openModal(id);
                 }
+            });
+
+            // attach direct listeners to view buttons (robustness) and add logging for debugging
+            document.querySelectorAll('.view-btn').forEach(b => {
+                b.addEventListener('click', function(e) {
+                    const id = this.getAttribute('data-booking');
+                    try { console.log('view-btn clicked', id); } catch(e){}
+                    if (id) openModal(id);
+                    e.stopPropagation();
+                });
             });
 
             // close modal when clicking backdrop
