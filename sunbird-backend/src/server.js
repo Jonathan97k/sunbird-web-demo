@@ -18,8 +18,19 @@ const app = express();
 // 2. MIDDLEWARE PIPELINE
 // ==========================================
 
-// Enable Cross-Origin Resource Sharing for all origins (demo mode)
-app.use(cors());
+// Configure CORS to allow only trusted origins
+const allowedOrigins = [
+    'https://sunbirdweb.netlify.app',
+    'http://localhost:3000'
+];
+app.use(cors({
+    origin: function(origin, callback) {
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) !== -1) return callback(null, true);
+        return callback(new Error('CORS policy: Origin not allowed'));
+    },
+    credentials: true
+}));
 
 // Parse incoming JSON payload bodies seamlessly
 app.use(express.json());
@@ -37,16 +48,13 @@ app.get('/', (req, res) => {
     res.status(200).json({
         status: "ok",
         message: "Sunbird Tourism API",
-        version: "1.0.0",
-        endpoints: [
-            '/api/auth',
-            '/api/hotels',
-            '/api/bookings',
-            '/api/enquiries',
-            '/api/offers',
-            '/api/newsletter'
-        ]
+        version: "1.0.0"
     });
+});
+
+// Explicit health endpoint for platform health checks
+app.get('/health', (req, res) => {
+    return res.status(200).json({ status: 'ok' });
 });
 
 // ==========================================

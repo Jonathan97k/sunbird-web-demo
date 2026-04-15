@@ -4,14 +4,14 @@ const bcrypt = require('bcryptjs');
 async function seed() {
     console.log('⏳ Starting dataset seeding...\n');
     try {
-        // 1. Seed Admin User
+        // 1. Seed Admin User (Global access - no hotel restriction)
         const adminHash = await bcrypt.hash('admin123', 10);
         await db.query(`
-            INSERT INTO users (email, password_hash, full_name, role) 
-            VALUES ($1, $2, $3, $4) 
+            INSERT INTO users (email, password_hash, full_name, role, hotel_id) 
+            VALUES ($1, $2, $3, $4, NULL) 
             ON CONFLICT (email) DO NOTHING
         `, ['admin@sunbirdmalawi.com', adminHash, 'System Admin', 'admin']);
-        console.log('✅ Seeded: admin user');
+        console.log('✅ Seeded: admin user (global access)');
 
         // 2. Seed Hotels
         const hotels = [
@@ -35,10 +35,23 @@ async function seed() {
         }
         console.log('✅ Seeded: 9 Sunbird hotels');
 
+        // 2.1 Seed Receptionist Users for each hotel
+        const receptionistHash = await bcrypt.hash('reception123', 10);
+        const dbHotels = await db.query('SELECT id, slug, name FROM hotels');
+        for (const hotel of dbHotels.rows) {
+            const hotelSlug = hotel.slug.split('-')[0]; // Get first part of slug for email
+            await db.query(`
+                INSERT INTO users (email, password_hash, full_name, role, hotel_id) 
+                VALUES ($1, $2, $3, $4, $5) 
+                ON CONFLICT (email) DO NOTHING
+            `, [`reception@${hotelSlug}.sunbirdmalawi.com`, receptionistHash, `${hotel.name} Reception`, 'receptionist', hotel.id]);
+        }
+        console.log('✅ Seeded: 9 receptionist users (one per hotel)');
+
         // 3. Seed Rooms per Hotel
-        const dbHotels = await db.query('SELECT id FROM hotels');
+        const hotelsForRooms = await db.query('SELECT id FROM hotels');
         await db.query('DELETE FROM rooms'); // Clear any existing to avoid massive duplicate build ups if run multiple times
-        for (const h of dbHotels.rows) {
+        for (const h of hotelsForRooms.rows) {
             await db.query(`
                 INSERT INTO rooms (hotel_id, name, price_mwk, description, max_guests, amenities) VALUES 
                 ($1, 'Standard Room', 85000, 'Comfortable room with essential amenities.', 2, ARRAY['WiFi', 'TV', 'Air Conditioning']),
@@ -46,7 +59,7 @@ async function seed() {
                 ($1, 'Suite', 220000, 'Luxury suite with a living area and exclusive services.', 4, ARRAY['WiFi', 'TV', 'Air Conditioning', 'Mini Fridge', 'Bathtub', 'Lounge Area']);
             `, [h.id]);
         }
-        console.log('✅ Seeded: 3 Rooms per hotel (' + (dbHotels.rows.length * 3) + ' total)');
+        console.log('✅ Seeded: 3 Rooms per hotel (' + (hotelsForRooms.rows.length * 3) + ' total)');
 
         // 4. Seed Offers
         await db.query('DELETE FROM offers'); 

@@ -28,8 +28,8 @@ router.post('/login', async (req, res) => {
         }
 
         // 2. Locate Database User
-        const userResult = await db.query('SELECT id, email, password_hash, full_name, role FROM users WHERE email = $1', [email]);
-        
+        const userResult = await db.query('SELECT id, email, password_hash, full_name, role, hotel_id FROM users WHERE email = $1', [email]);
+
         if (userResult.rows.length === 0) {
             // Returning generic invalid credentials to deter email guessing attacks
             return res.status(401).json({ error: 'Invalid credentials' });
@@ -46,7 +46,7 @@ router.post('/login', async (req, res) => {
         // 4. Token Generation
         // This signs the user's non-sensitive data combined with our JWT_SECRET
         const token = jwt.sign(
-            { id: user.id, email: user.email, role: user.role, full_name: user.full_name },
+            { id: user.id, email: user.email, role: user.role, full_name: user.full_name, hotel_id: user.hotel_id },
             process.env.JWT_SECRET,
             { expiresIn: '24h' } // Security timeout automatically forces token invalidation
         );

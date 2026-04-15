@@ -2,21 +2,23 @@
 -- Sunbird Hotels & Resorts Database Schema
 
 -- Drop tables if they exist to allow clean recreation
+-- Drop in reverse order of dependencies to handle foreign keys
 DROP TABLE IF EXISTS newsletter_subscribers CASCADE;
 DROP TABLE IF EXISTS offers CASCADE;
 DROP TABLE IF EXISTS enquiries CASCADE;
 DROP TABLE IF EXISTS bookings CASCADE;
 DROP TABLE IF EXISTS rooms CASCADE;
-DROP TABLE IF EXISTS hotels CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS hotels CASCADE;
 
--- 1. users table
+-- 1. users table (created without hotel_id constraint first)
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
     full_name VARCHAR(255),
     role VARCHAR(50) DEFAULT 'admin',
+    hotel_id INTEGER,
     created_at TIMESTAMP DEFAULT NOW()
 );
 
@@ -35,6 +37,9 @@ CREATE TABLE hotels (
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW()
 );
+
+-- Add foreign key constraint to users table after hotels exists
+ALTER TABLE users ADD CONSTRAINT users_hotel_id_fkey FOREIGN KEY (hotel_id) REFERENCES hotels(id) ON DELETE SET NULL;
 
 -- 3. rooms table
 CREATE TABLE rooms (

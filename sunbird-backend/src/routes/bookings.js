@@ -96,8 +96,8 @@ router.post('/', async (req, res) => {
 // IMPORTANT: Place this BEFORE /:id dynamically intercepting routing confusion
 router.get('/stats/summary', requireAuth, async (req, res) => {
     try {
-        const statsQuery = `
-            SELECT 
+        let statsQuery = `
+            SELECT
                 COUNT(*) as total_bookings,
                 COUNT(*) FILTER (WHERE date_trunc('month', created_at) = date_trunc('month', CURRENT_DATE)) as this_month_bookings,
                 COUNT(*) FILTER (WHERE booking_status = 'pending') as pending_bookings,
@@ -105,8 +105,24 @@ router.get('/stats/summary', requireAuth, async (req, res) => {
                 SUM(total_amount) FILTER (WHERE payment_status = 'paid') as revenue_all_time
             FROM bookings
         `;
-        
-        const result = await db.query(statsQuery);
+
+        // Role-based filtering: Receptionists only see stats for their hotel
+        const queryParams = [];
+        if (req.user.role === 'receptionist' && req.user.hotel_id) {
+            statsQuery = `
+                SELECT
+                    COUNT(*) as total_bookings,
+                    COUNT(*) FILTER (WHERE date_trunc('month', created_at) = date_trunc('month', CURRENT_DATE)) as this_month_bookings,
+                    COUNT(*) FILTER (WHERE booking_status = 'pending') as pending_bookings,
+                    SUM(total_amount) FILTER (WHERE payment_status = 'paid' AND date_trunc('month', created_at) = date_trunc('month', CURRENT_DATE)) as revenue_this_month,
+                    SUM(total_amount) FILTER (WHERE payment_status = 'paid') as revenue_all_time
+                FROM bookings
+                WHERE hotel_id = $1
+            `;
+            queryParams.push(req.user.hotel_id);
+        }
+
+        const result = await db.query(statsQuery, queryParams);
         const stats = result.rows[0];
 
         res.status(200).json({
@@ -132,14 +148,23 @@ router.get('/', requireAuth, async (req, res) => {
         let queryParams = [];
         let whereClauses = [];
 
+        // Role-based filtering: Receptionists can only see their hotel's bookings
+        if (req.user.role === 'receptionist' && req.user.hotel_id) {
+            queryParams.push(req.user.hotel_id);
+            whereClauses.push(`b.hotel_id = $${queryParams.length}`);
+        }
+
         if (status) {
             queryParams.push(status);
             whereClauses.push(`b.booking_status = $${queryParams.length}`);
         }
 
         if (hotel_id) {
-            queryParams.push(hotel_id);
-            whereClauses.push(`b.hotel_id = $${queryParams.length}`);
+            // Admins can filter by hotel_id, but receptionists are already filtered
+            if (req.user.role === 'admin') {
+                queryParams.push(hotel_id);
+                whereClauses.push(`b.hotel_id = $${queryParams.length}`);
+            }
         }
 
         const whereString = whereClauses.length > 0 ? `WHERE ${whereClauses.join(' AND ')}` : '';
